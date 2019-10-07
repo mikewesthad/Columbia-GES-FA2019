@@ -59,6 +59,9 @@ jspm_packages
 
 # UNITY GITIGNORE
 
+# Zipped files
+class-files/*.zip
+
 class-files/*/[Ll]ibrary/
 class-files/*/[Tt]emp/
 class-files/*/[Oo]bj/
