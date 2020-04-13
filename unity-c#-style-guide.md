@@ -12,6 +12,7 @@ A style guide for Unity projects, mixing elements from [raywenderlich/c-sharp-st
 - [Avoid Magic Numbers](#access-level-modifiers)
 - [Unused Code](#unused-code)
 - [Scene Organization](#scene-organization)
+- [Folder Organization](#folder-organization)
 
 ## Golden Rules
 
@@ -156,3 +157,6 @@ Here's an example scene configured in two ways:
 
 ![](./good-scene-org.png)
 
+## Folder Organization
+
+Organize your Assets folder logically, e.g. place all materials in a "Materials" folder, all models in a "Models" folder, etc.
