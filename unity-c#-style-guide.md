@@ -1,6 +1,8 @@
 # GES Style Guide
 
-A style guide for Unity projects, mixing elements from [raywenderlich/c-sharp-style-guide](https://github.com/raywenderlich/c-sharp-style-guide) and David Antognoli's [Code and Unity style conventions](https://docs.google.com/document/d/1yrKCY_sVAdWkwgWAjJLiJFj1OOHn6dC__pGkSVB61YY/edit).
+A style guide for Game Engine Scripting Unity projects in IAM. 
+
+This mixes elements from [raywenderlich/c-sharp-style-guide](https://github.com/raywenderlich/c-sharp-style-guide) and David Antognoli's [Code and Unity style conventions](https://docs.google.com/document/d/1yrKCY_sVAdWkwgWAjJLiJFj1OOHn6dC__pGkSVB61YY/edit).
 
 ## Table of Contents
 
@@ -9,7 +11,7 @@ A style guide for Unity projects, mixing elements from [raywenderlich/c-sharp-st
 - [Brace Style](#brace-style)
 - [Access Level Modifiers](#access-level-modifiers)
 - [List Elements in Order](#list-elements-in-order)
-- [Avoid Magic Numbers](#access-level-modifiers)
+- [Avoid Magic Numbers](#avoid-magic-numbers)
 - [Unused Code](#unused-code)
 - [Scene Organization](#scene-organization)
 - [Folder Organization](#folder-organization)
@@ -136,6 +138,10 @@ List the elements within your classes in the following order:
 
 See the [StyleCop docs](https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1201.md) for a more detailed order.
 
+## Avoid Magic Numbers
+
+[Magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)) are values with unexplained meanings, e.g. `health -= 5`. In those places, prefer variables and/or serialized fields, like `health -= attackDamage`. This will make your code both more readable and flexible.
+
 ## Remove Unused Code
 
 - Remove unused Unity methods from the Unity template - e.g. empty `Start` or `Update` methods.
@@ -144,7 +150,7 @@ See the [StyleCop docs](https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blo
 
 ## Scene Organization
 
-- Use descriptive and accurate names for your game objects, e.g. "Player" instead of "Capsule".
+- Use descriptive and accurate names for your scenes and game objects, e.g. "Player" instead of "Capsule".
 - Use empties to organize objects in your scene into logical groups, e.g. "Lights", "Building", "Player", etc.
 
 Here's an example scene configured in two ways:
