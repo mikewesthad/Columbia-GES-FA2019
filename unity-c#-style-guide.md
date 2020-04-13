@@ -8,6 +8,10 @@ A style guide for Unity projects, mixing elements from [raywenderlich/c-sharp-st
 - [Naming](#naming)
 - [Brace Style](#brace-style)
 - [Access Level Modifiers](#access-level-modifiers)
+- [List Elements in Order](#list-elements-in-order)
+- [Avoid Magic Numbers](#access-level-modifiers)
+- [Unused Code](#unused-code)
+- [Scene Organization](#scene-organization)
 
 ## Golden Rules
 
@@ -118,3 +122,37 @@ class MyClass
 
 - Default to making everything `private`. Only use a more permissive access level (like `public`) when it is necessary.
 - Use `[SerializeField]` for exposing parameters in the Unity inspector, not the public access modifers.
+
+## List Elements in Order
+
+List the elements within your classes in the following order:
+
+- Fields
+- Constructors
+- Enums
+- Properties
+- Methods
+
+See the [StyleCop docs](https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1201.md) for a more detailed order.
+
+## Remove Unused Code
+
+- Remove unused Unity methods from the Unity template - e.g. empty `Start` or `Update` methods.
+- Remove commented out code.
+- Remove unused variables or methods.
+
+## Scene Organization
+
+- Use descriptive and accurate names for your game objects, e.g. "Player" instead of "Capsule".
+- Use empties to organize objects in your scene into logical groups, e.g. "Lights", "Building", "Player", etc.
+
+Here's an example scene configured in two ways:
+
+**AVOID**
+
+![](./bad-scene-org.png)
+
+**PREFER**
+
+![](./good-scene-org.png)
+
