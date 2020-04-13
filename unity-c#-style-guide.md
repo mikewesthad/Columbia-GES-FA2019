@@ -1,260 +1,81 @@
 # GES Style Guide
 
-Forked from [raywenderlich/c-sharp-style-guide](https://github.com/raywenderlich/c-sharp-style-guide).
-
-## Inspiration
-
-This style guide is based on C# and Unity conventions. 
+A style guide for Unity projects, mixing elements from [raywenderlich/c-sharp-style-guide](https://github.com/raywenderlich/c-sharp-style-guide) and David Antognoli's [Code and Unity style conventions](https://docs.google.com/document/d/1yrKCY_sVAdWkwgWAjJLiJFj1OOHn6dC__pGkSVB61YY/edit).
 
 ## Table of Contents
 
-- [Nomenclature](#nomenclature)
-  + [Namespaces](#namespaces)
-  + [Classes & Interfaces](#classes--interfaces)
-  + [Methods](#methods)
-  + [Fields](#fields)
-  + [Parameters](#parameters--parameters)
-  + [Delegates](#delegates--delegates)
-  + [Events](#events--events)
-  + [Misc](#misc)
-- [Declarations](#declarations)
-  + [Access Level Modifiers](#access-level-modifiers)
-  + [Fields & Variables](#fields--variables)
-  + [Classes](#classes)
-  + [Interfaces](#interfaces)
-- [Spacing](#spacing)
-  + [Indentation](#indentation)
-  + [Line Length](#line-length)
-  + [Vertical Spacing](#vertical-spacing)
+- [Golden Rules](#golden-rules)
+- [Naming](#naming)
 - [Brace Style](#brace-style)
-- [Switch Statements](#switch-statements)
-- [Language](#language)
-- [Copyright Statement](#copyright-statement)
-- [Smiley Face](#smiley-face)
-- [Credit](#credits)
+- [Access Level Modifiers](#access-level-modifiers)
 
+## Golden Rules
 
-## Nomenclature
+- Favor clarity in your code. Code is meant to be read - by teammates or by yourself in the future - so aim to make your code readable.
+- Use consistent style conventions when writing your code. When you write your code in a consistent style, it is easier to read.
 
-On the whole, naming should follow C# standards.
+## Naming
 
-### Namespaces
+In gereral, naming should follow C# standards. See Microsoft's [naming conventions guide](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/general-naming-conventions) and [capitalization guide](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions). A few concessions are made to match the Unity style used in their tutorials.
 
-Namespaces are all **PascalCase**, multiple words concatenated together, without hyphens ( - ) or underscores ( \_ ). The exception to this rule are acronyms like GUI or HUD, which can be uppercase:
+### Descriptive Naming
 
-**AVOID**:
+- Favor clarity and readability over brevity. `CanScrollHorizontally` is more understandable than `ScrollableX`, and both are better than a random variable named `s`!
+- Classes/variables/fields/properties should generally be nouns, `explosiveForce` instead of `explode`.
+- Methods/functions should generally be verbs, `ApplyHorizontalForce` instead of `HorizontalForce`.
+- Bool variables should generally be framed as a question, `isInvulernable` or `hasKey`.
 
-```csharp
-com.raywenderlich.fpsgame.hud.healthbar
-```
+### Casing
 
-**PREFER**:
+| Identifier | Casing | Example |
+|---|---|---|
+| Class | PascalCase | `RadialSlider` |
+| Methods | PascalCase | `TakeItem()` |
+| Fields | camelCase | `craftingInventory` |
+| Properties | PascalCase | `CurrentMusicTrack` |
+| Parameters | camelCase | `playerLocation` |
+| Local Variables | camelCase | `explosiveForce` |
 
-```csharp
-RayWenderlich.FPSGame.HUD.Healthbar
-```
+Here is an example that incorperates all of these:
 
-### Classes & Interfaces
-
-Classes and interfaces are written in **PascalCase**. For example `RadialSlider`. 
-
-### Methods
-
-Methods are written in **PascalCase**. For example `DoSomething()`. 
-
-### Fields
-
-All non-static fields are written **camelCase**. Per Unity convention, this includes **public fields** as well.
-
-For example:
-
-```csharp
-public class MyClass 
+```cs
+// PascalCase for Class:
+public class BallThrow : MonoBehaviour
 {
-    public int publicField;
-    int packagePrivate;
-    private int myPrivate;
-    protected int myProtected;
+    // camelCase for fields:
+    [SerializeField] GameObject ballPrefab;
+    [SerializeField] float shootForce = 10f;
+    
+    // PascalCase for properties:
+    public bool CanShoot { get; private set; }
+    
+    void Update()
+    {
+        // camelCase for local variables:
+        bool isMouseDown = Input.GetMouseButtonDown(0);
+        
+        if (CanShoot && isMouseDown)
+        {
+            ThrowBall(transform.position, transform.forward * shootForce);
+            CanShoot = false;
+            Invoke("EnableShooting", 1 / shotsPerSecond);
+        }
+    }
+    
+    // PascalCase for methods and camelCase for parameters:
+    void ThrowBall(Vector3 startingPosition, Vector3 throwForce)
+    {
+        GameObject ball = Instantiate(ballPrefab, startingPosition, Quaternion.identity);
+        Rigidbody ballRigidbody = ball.GetComponent<Rigidbody>();
+        ballRigidbody.AddForce(throwForce, ForceMode.Impulse);
+    }
+
+    void EnableShooting()
+    {
+        canShoot = true;
+    }
 }
 ```
-
-**AVOID:**
-
-```csharp
-private int _myPrivateVariable
-```
-
-**PREFER:**
-
-```csharp
-private int myPrivateVariable
-```
-
-Static fields are the exception and should be written in **PascalCase**:
-
-```csharp
-public static int TheAnswer = 42;
-```
-### Properties
-
-All properties are written in **PascalCase**. For example:
-
-```csharp
-public int PageNumber 
-{
-    get { return pageNumber; }
-    set { pageNumber = value; }
-}
-```
-
-### Parameters
-
-Parameters are written in **camelCase**.
-
-**AVOID:**
-
-```csharp
-void DoSomething(Vector3 Location)
-```
-
-**PREFER:**
-
-```csharp
-void DoSomething(Vector3 location)
-```
-
-Single character values are to be avoided except for temporary looping variables.
-
-### Actions
-
-Actions are written in **PascalCase**. For example:
-
-```csharp
-public event Action<int> ValueChanged;
-```
-
-### Misc
-
-In code, acronyms should be treated as words. For example:
-
-**AVOID:**
-
-```csharp
-XMLHTTPRequest
-String URL
-findPostByID
-```  
-
-**PREFER:**
-
-```csharp
-XmlHttpRequest
-String url
-findPostById
-```
-
-## Declarations
-
-### Access Level Modifiers
-
-Access level modifiers should be explicitly defined for classes, methods and member variables.
-
-### Fields & Variables
-
-Prefer single declaration per line.
-
-**AVOID:**
-
-```csharp
-string username, twitterHandle;
-```
-
-**PREFER:**
-
-```csharp
-string username;
-string twitterHandle;
-```
-
-### Classes
-
-Exactly one class per source file, although inner classes are encouraged where scoping appropriate.
-
-### Interfaces
-
-All interfaces should be prefaced with the letter **I**. 
-
-**AVOID:**
-
-```csharp
-RadialSlider
-```
-
-**PREFER:**
-
-```csharp
-IRadialSlider
-```
-
-## Spacing
-
-Spacing is especially important in raywenderlich.com code, as code needs to be easily readable as part of the tutorial. 
-
-### Indentation
-
-Indentation should be done using **spaces** — never tabs.  
-
-#### Blocks
-
-Indentation for blocks uses **4 spaces** for optimal readability:
-
-**AVOID:**
-
-```csharp
-for (int i = 0; i < 10; i++) 
-{
-  Debug.Log("index=" + i);
-}
-```
-
-**PREFER:**
-
-```csharp
-for (int i = 0; i < 10; i++) 
-{
-    Debug.Log("index=" + i);
-}
-```
-
-#### Line Wraps
-
-Indentation for line wraps should use **4 spaces** (not the default 8):
-
-**AVOID:**
-
-```csharp
-CoolUiWidget widget =
-        someIncrediblyLongExpression(that, reallyWouldNotFit, on, aSingle, line);
-```
-
-**PREFER:**
-
-```csharp
-CoolUiWidget widget =
-    someIncrediblyLongExpression(that, reallyWouldNotFit, on, aSingle, line);
-```
-
-### Line Length
-
-Lines should be no longer than **100** characters long.
-
-### Vertical Spacing
-
-There should be exactly one blank line between methods to aid in visual clarity 
-and organization. Whitespace within methods should separate functionality, but 
-having too many sections in a method often means you should refactor into
-several methods.
-
 
 ## Brace Style
 
@@ -293,75 +114,7 @@ class MyClass
 }
 ```
 
-Conditional statements are always required to be enclosed with braces,
-irrespective of the number of lines required.
+## Access Level Modifiers
 
-**AVOID:**
-
-```csharp
-if (someTest)
-    doSomething();  
-
-if (someTest) doSomethingElse();
-```
-
-**PREFER:**
-
-```csharp
-if (someTest) 
-{
-    DoSomething();
-}  
-
-if (someTest)
-{
-    DoSomethingElse();
-}
-```
-## Switch Statements
-
-Switch-statements come with `default` case by default (heh). If the `default` case is never reached, be sure to remove it.
-
-**AVOID:**  
-  
-```csharp
-switch (variable) 
-{
-    case 1:
-        break;
-    case 2:
-        break;
-    default:
-        break;
-}
-```
-
-**PREFER:**  
-  
-```csharp
-switch (variable) 
-{
-    case 1:
-        break;
-    case 2:
-        break;
-}
-```
-
-## Language
-
-Use US English spelling.
-
-**AVOID:**
-
-```csharp
-string colour = "red";
-```
-
-**PREFER:**
-
-```csharp
-string color = "red";
-```
-
-The exception here is `MonoBehaviour` as that's what the class is actually called
+- Default to making everything `private`. Only use a more permissive access level (like `public`) when it is necessary.
+- Use `[SerializeField]` for exposing parameters in the Unity inspector, not the public access modifers.
